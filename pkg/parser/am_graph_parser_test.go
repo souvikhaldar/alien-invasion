@@ -3,6 +3,8 @@ package parser
 import (
 	"os"
 	"testing"
+
+	"github.com/souvikhaldar/alien-invasion/pkg/utils/config"
 )
 
 func TestParse(t *testing.T) {
@@ -10,7 +12,8 @@ func TestParse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m := NewMap()
+	config := config.LoadConfig("../../config.json")
+	m := NewMap(config.NoOfCities, config.PossibleRelations)
 	err = m.Parse(fileReader)
 	if err != nil {
 		t.Fatal(err)

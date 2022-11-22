@@ -7,7 +7,6 @@ import (
 	"log"
 	"strings"
 
-	"github.com/souvikhaldar/alien-invasion/pkg/utils/config"
 	"github.com/souvikhaldar/go-ds/graph"
 )
 
@@ -20,18 +19,17 @@ type Map struct {
 	relations map[string]int
 }
 
-func NewMap() *Map {
+func NewMap(noOfCities int, relations []string) *Map {
 	var counter int
-	config := config.LoadConfig("../../config.json")
 	cityMap := new(Map)
 	cityMap.relations = make(map[string]int)
-	for _, rel := range config.PossibleRelations {
+	for _, rel := range relations {
 		cityMap.relations[rel] = counter
 		counter++
 	}
 	cityMap.graph = graph.NewAMGraph(
-		config.NoOfCities,
-		config.NoOfCities,
+		noOfCities,
+		noOfCities,
 	)
 	return cityMap
 }
