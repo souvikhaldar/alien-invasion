@@ -26,3 +26,18 @@ func LoadConfig(filePath string) *Config {
 	}
 	return c
 }
+func (c *Config) SetInputFilePath(path string) {
+	c.InputFilePath = path
+}
+func (c *Config) SetNoOfAliens(n int) {
+	c.NoOfAliens = n
+}
+func (c *Config) SetNoOfCities(n int) {
+	c.NoOfCities
+}
+func (c *Config) SetPossibleRelation(r []string) {
+	c.PossibleRelations = r
+}
+func (c *Config) SetOutputFilePath(p string) {
+	c.OutputFilePath = p
+}
