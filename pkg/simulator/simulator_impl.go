@@ -40,12 +40,12 @@ func NewSimulation(
 		log.Fatal("Could not parse the map")
 	}
 
+	s.cities = p.GetCities()
 	s.aliveAliens = make([]Alien, noOfAliens)
 	for i := 0; i < noOfAliens; i++ {
 		s.aliveAliens[i].name = i
 		s.aliveAliens[i].currentCity = s.GetRandomCity()
 	}
-	s.cities = p.GetCities()
 
 	return s
 }
@@ -67,14 +67,21 @@ func (s *Simulation) Kill() {
 		}
 	}
 	for city, aliens := range collitionMap {
+		if city == "" {
+			// The alien is trapped
+			continue
+		}
 		if len(aliens) > 1 {
 			killmsg := fmt.Sprintf("%s has been destroyed by ", city)
 			for pos, a := range aliens {
 				if pos == len(aliens)-1 {
 					killmsg += fmt.Sprintf("and alien %d.", a)
-					break
+				} else if pos == len(aliens)-2 {
+					killmsg += fmt.Sprintf("alien %d ", a)
+
+				} else {
+					killmsg += fmt.Sprintf("alien %d, ", a)
 				}
-				killmsg += fmt.Sprintf("alien %d, ", a)
 				s.removeAlien(a)
 			}
 			log.Println(killmsg)

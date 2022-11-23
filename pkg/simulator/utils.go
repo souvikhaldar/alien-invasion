@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Simulation) removeAlien(name int) {
-	aliens := make([]int, 0)
+	aliens := make([]Alien, 0)
 	for _, a := range s.aliveAliens {
 		if a.name != name {
 			aliens = append(aliens, a)
@@ -16,6 +16,9 @@ func (s *Simulation) removeAlien(name int) {
 }
 
 func (s *Simulation) GetRandomCity() string {
+	if len(s.cities) == 0 {
+		return ""
+	}
 	rand.Seed(time.Now().UnixNano())
 	nonce := rand.Intn(100) % len(s.cities)
 
@@ -24,7 +27,10 @@ func (s *Simulation) GetRandomCity() string {
 
 func (s *Simulation) GetRandomNextCity(currentCity string) string {
 	rand.Seed(time.Now().UnixNano())
-	neighbours := s.graph.GetNeighboursOf(currentCity)
+	neighbours := s.cityMap.GetNeighboursOf(currentCity)
+	if len(neighbours) == 0 {
+		return ""
+	}
 	nonce := rand.Intn(100) % len(neighbours)
 	return neighbours[nonce]
 }

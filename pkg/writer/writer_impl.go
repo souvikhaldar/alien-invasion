@@ -11,7 +11,6 @@ import (
 
 type State struct {
 	cityMap graph.Graph
-	cities  []string
 }
 
 func NewState(i io.Reader, p parser.Parser) *State {
@@ -22,16 +21,20 @@ func NewState(i io.Reader, p parser.Parser) *State {
 	}
 	return &State{
 		cityMap: c,
-		cities:  c.GetAllNodes(),
 	}
 }
 
 func (s *State) Write(w io.Writer) error {
 	var buf bytes.Buffer
-	for _, c := range s.cities {
+	for _, c := range s.cityMap.GetAllNodes() {
 		buf.WriteString(c)
-		buf.WriteString(" ")
 		neigh := s.cityMap.GetNeighboursOf(c)
+		if len(neigh) == 0 {
+			buf.WriteString("\n")
+		} else {
+			buf.WriteString(" ")
+
+		}
 		for pos, n := range neigh {
 			if pos == len(neigh)-1 {
 				buf.WriteString(s.cityMap.GetRelationBetween(c, n) + "=" + n + "\n")
