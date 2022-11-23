@@ -19,6 +19,7 @@ type Simulation struct {
 	cityMap     graph.Graph
 	aliveAliens []Alien
 	cities      []string
+	dest        io.Writer // here distination is file
 	writer      writer.Writer
 }
 
@@ -26,10 +27,14 @@ func NewSimulation(
 	p parser.Parser,
 	i io.Reader,
 	noOfAliens int,
+	d io.Writer,
 	w writer.Writer,
+
 ) *Simulation {
 	s := new(Simulation)
+	s.dest = d
 	s.writer = w
+	var err error
 	s.cityMap, err = p.Parse(i)
 	if err != nil {
 		log.Fatal("Could not parse the map")
@@ -38,7 +43,7 @@ func NewSimulation(
 	s.aliveAliens = make([]Alien, noOfAliens)
 	for i := 0; i < noOfAliens; i++ {
 		s.aliveAliens[i].name = i
-		s.aliveAliens[i].currentCity = p.parse.GetRandomCity()
+		s.aliveAliens[i].currentCity = s.GetRandomCity()
 	}
 	s.cities = p.GetCities()
 
@@ -93,7 +98,7 @@ func (s *Simulation) Simulate() {
 }
 
 func (s *Simulation) SaveState() {
-	if err := s.writer.Write(s.cityMap, s.writer); err != nil {
+	if err := s.writer.Write(s.dest); err != nil {
 		log.Fatal("Unable to save the state of map: ", err)
 	}
 }

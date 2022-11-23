@@ -1,11 +1,7 @@
 package writer
 
-import (
-	"io"
-
-	"github.com/souvikhaldar/go-ds/graph"
-)
+import "io"
 
 type Writer interface {
-	Write(graph.Graph, io.Writer) error
+	Write(w io.Writer) error
 }

@@ -58,6 +58,12 @@ func (m *Map) Parse(r io.Reader) (graph.Graph, error) {
 			relation := relationTo[0]
 			to := relationTo[1]
 			m.graph.AddNode(city, to, relation)
+			if m.graph.GetRelationBetween(to, city) == "" {
+				// add the opposite relation
+				if opRel := getOppositeRelation(relation); opRel != "" {
+					m.graph.AddNode(to, city, opRel)
+				}
+			}
 		}
 	}
 	return m.graph, nil

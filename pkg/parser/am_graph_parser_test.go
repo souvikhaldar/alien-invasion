@@ -12,6 +12,7 @@ func TestParse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer fileReader.Close()
 	config := config.LoadConfig("../../config.json")
 	m := NewMap(config.NoOfCities, config.PossibleRelations)
 	_, err = m.Parse(fileReader)
