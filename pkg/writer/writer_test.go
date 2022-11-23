@@ -25,5 +25,8 @@ func TestWrite(t *testing.T) {
 	defer fileWriter.Close()
 
 	s := NewState(fileReader, m)
-	s.Write(fileWriter)
+	err = s.Write(fileWriter)
+	if err != nil {
+		t.Fatal(err)
+	}
 }

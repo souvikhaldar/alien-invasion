@@ -26,27 +26,27 @@ func NewState(i io.Reader, p parser.Parser) *State {
 	}
 }
 
-func (s *State) Write(w io.Writer) {
+func (s *State) Write(w io.Writer) error {
 	var buf bytes.Buffer
 	for _, c := range s.cities {
-		log.Println("Checking city: ", c)
 		buf.WriteString(c)
 		buf.WriteString(" ")
 		neigh := s.cityMap.GetNeighboursOf(c)
 		for pos, n := range neigh {
-			log.Println("Neighbour: ", n)
 			if pos == len(neigh)-1 {
 				buf.WriteString(s.cityMap.GetRelationBetween(c, n) + "=" + n + "\n")
 				break
 			}
 			buf.WriteString(s.cityMap.GetRelationBetween(c, n) + "=" + n + " ")
 		}
-		log.Println("Writing to file: ", buf.String())
 		if _, err := w.Write(buf.Bytes()); err != nil {
 			log.Println("Unable to write: ", err)
+			return err
+
 		}
 		// reset before checking for next city
 		buf.Reset()
 	}
+	return nil
 
 }
