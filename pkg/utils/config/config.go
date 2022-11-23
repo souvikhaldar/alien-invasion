@@ -33,7 +33,7 @@ func (c *Config) SetNoOfAliens(n int) {
 	c.NoOfAliens = n
 }
 func (c *Config) SetNoOfCities(n int) {
-	c.NoOfCities
+	c.NoOfCities = n
 }
 func (c *Config) SetPossibleRelation(r []string) {
 	c.PossibleRelations = r
