@@ -1,6 +1,0 @@
-Fabens east=Keystone
-Hatch
-Keystone west=Fabens east=Steprock
-Talihina
-Steprock west=Keystone
-Amchitka

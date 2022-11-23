@@ -9,16 +9,16 @@ import (
 )
 
 func TestWrite(t *testing.T) {
-	fileReader, err := os.Open("input_map.txt")
+	config := config.LoadConfig("testfiles/config.json")
+	fileReader, err := os.Open(config.InputFilePath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer fileReader.Close()
 
-	config := config.LoadConfig("../../config.json")
 	m := parser.NewMap(config.NoOfCities, config.PossibleRelations)
 
-	fileWriter, err := os.Create("output_map.txt")
+	fileWriter, err := os.Create(config.OutputFilePath)
 	if err != nil {
 		t.Fatal(err)
 	}
