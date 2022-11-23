@@ -1,8 +1,8 @@
 package simulator
 
 type Simulator interface {
-	MoveOneStep()
+	moveOneStep()
 	Simulate()
-	Kill()
-	SaveState()
+	kill()
+	saveState()
 }

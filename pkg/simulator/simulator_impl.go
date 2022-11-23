@@ -19,7 +19,6 @@ type Simulation struct {
 	cityMap     graph.Graph
 	aliveAliens []Alien
 	cities      []string
-	dest        io.Writer // here distination is file
 	writer      writer.Writer
 }
 
@@ -27,13 +26,11 @@ func NewSimulation(
 	p parser.Parser,
 	i io.Reader,
 	noOfAliens int,
-	d io.Writer,
-	w writer.Writer,
+	wt writer.Writer,
 
 ) *Simulation {
 	s := new(Simulation)
-	s.dest = d
-	s.writer = w
+	s.writer = wt
 	var err error
 	s.cityMap, err = p.Parse(i)
 	if err != nil {
@@ -50,13 +47,13 @@ func NewSimulation(
 	return s
 }
 
-func (s *Simulation) MoveOneStep() {
+func (s *Simulation) moveOneStep() {
 	for _, a := range s.aliveAliens {
 		a.currentCity = s.GetRandomNextCity(a.currentCity)
 	}
 }
 
-func (s *Simulation) Kill() {
+func (s *Simulation) kill() {
 	collitionMap := make(map[string][]int)
 	for _, a := range s.aliveAliens {
 		_, ok := collitionMap[a.currentCity]
@@ -96,16 +93,16 @@ func (s *Simulation) Simulate() {
 	// let the aliens wander 10,000 times
 	for i := 0; i < 10000; i++ {
 		// move the aliens in any random direction one step
-		s.MoveOneStep()
+		s.moveOneStep()
 		// check if there is collition, kill the alien and destroy the map
-		s.Kill()
+		s.kill()
 	}
 	// save the state of the map once the great wander is over
-	s.SaveState()
+	s.saveState()
 }
 
-func (s *Simulation) SaveState() {
-	if err := s.writer.Write(s.dest); err != nil {
+func (s *Simulation) saveState() {
+	if err := s.writer.Write(); err != nil {
 		log.Fatal("Unable to save the state of map: ", err)
 	}
 }

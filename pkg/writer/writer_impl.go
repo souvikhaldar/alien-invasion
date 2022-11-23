@@ -11,9 +11,14 @@ import (
 
 type State struct {
 	cityMap graph.Graph
+	wt      io.Writer
 }
 
-func NewState(i io.Reader, p parser.Parser) *State {
+func NewState(
+	i io.Reader,
+	p parser.Parser,
+	wt io.Writer,
+) *State {
 	c, err := p.Parse(i)
 	if err != nil {
 		log.Println("Unable to create the map: ", err)
@@ -21,10 +26,11 @@ func NewState(i io.Reader, p parser.Parser) *State {
 	}
 	return &State{
 		cityMap: c,
+		wt:      wt,
 	}
 }
 
-func (s *State) Write(w io.Writer) error {
+func (s *State) Write() error {
 	var buf bytes.Buffer
 	for _, c := range s.cityMap.GetAllNodes() {
 		buf.WriteString(c)
@@ -42,7 +48,7 @@ func (s *State) Write(w io.Writer) error {
 			}
 			buf.WriteString(s.cityMap.GetRelationBetween(c, n) + "=" + n + " ")
 		}
-		if _, err := w.Write(buf.Bytes()); err != nil {
+		if _, err := s.wt.Write(buf.Bytes()); err != nil {
 			log.Println("Unable to write: ", err)
 			return err
 
@@ -51,5 +57,4 @@ func (s *State) Write(w io.Writer) error {
 		buf.Reset()
 	}
 	return nil
-
 }

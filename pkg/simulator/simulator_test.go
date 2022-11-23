@@ -25,13 +25,12 @@ func TestSimulate(t *testing.T) {
 	}
 	defer fileWriter.Close()
 
-	sw := writer.NewState(fileReader, m)
+	sw := writer.NewState(fileReader, m, fileWriter)
 
 	s := NewSimulation(
 		m,
 		fileReader,
 		config.NoOfAliens,
-		fileWriter,
 		sw,
 	)
 	s.Simulate()
