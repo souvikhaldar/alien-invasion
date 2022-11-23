@@ -100,7 +100,6 @@ func (s *Simulation) Simulate() {
 		// check if there is collition, kill the alien and destroy the map
 		s.Kill()
 	}
-	log.Println("Alive aliens: ", s.aliveAliens)
 	// save the state of the map once the great wander is over
 	s.SaveState()
 }
