@@ -1,5 +1,8 @@
 package simulator
 
 type Simulator interface {
-	CreateMap()
+	MoveOneStep()
+	Simulate()
+	Kill()
+	SaveState()
 }

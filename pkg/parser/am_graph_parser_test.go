@@ -14,7 +14,7 @@ func TestParse(t *testing.T) {
 	}
 	config := config.LoadConfig("../../config.json")
 	m := NewMap(config.NoOfCities, config.PossibleRelations)
-	err = m.Parse(fileReader)
+	_, err = m.Parse(fileReader)
 	if err != nil {
 		t.Fatal(err)
 	}

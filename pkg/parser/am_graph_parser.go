@@ -17,6 +17,7 @@ var (
 type Map struct {
 	graph     graph.Graph
 	relations map[string]int
+	cities    []string
 }
 
 func NewMap(noOfCities int, relations []string) *Map {
@@ -35,7 +36,7 @@ func NewMap(noOfCities int, relations []string) *Map {
 }
 
 // Parse parses the data read and create a graph
-func (m *Map) Parse(r io.Reader) error {
+func (m *Map) Parse(r io.Reader) (graph.Graph, error) {
 	// scan the input line by line
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
@@ -47,16 +48,21 @@ func (m *Map) Parse(r io.Reader) error {
 		}
 		// first element is the city
 		city := fields[0]
+		m.cities = append(m.cities, city)
 		// all subsequent elements are relations of this city
 		for i := 1; i < len(fields); i++ {
 			relationTo := strings.Split(fields[i], "=")
 			if len(relationTo) == 0 {
-				return ErrCorruptLine
+				return nil, ErrCorruptLine
 			}
 			relation := relationTo[0]
 			to := relationTo[1]
 			m.graph.AddNode(city, to, relation)
 		}
 	}
-	return nil
+	return m.graph, nil
+}
+
+func (m *Map) GetCities() []string {
+	return m.cities
 }
