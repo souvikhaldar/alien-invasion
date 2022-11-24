@@ -7,6 +7,8 @@ import (
 )
 
 type Simulator interface {
+	// Simulate simulates the invasion scenaio
 	Simulate()
+	// SaveState saves the final state to the destination provided
 	SaveState(writer.Writer, io.Writer) error
 }
