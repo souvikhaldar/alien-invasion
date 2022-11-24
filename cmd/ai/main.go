@@ -12,13 +12,21 @@ import (
 )
 
 func main() {
+	// the number of aliens to play in the simulation
 	numAliens := flag.Int("N", 0, "Number of aliens")
-	flag.Parse()
 	if numAliens == nil {
 		log.Panicln("Number of aliens not provided")
 	}
-	log.Printf("Creating %d aliens...\n", *numAliens)
-	conf := config.LoadConfig("../../config.json")
+
+	// path to the configuration file
+	// by default it is located in root dir
+	configPath := flag.String("conf", "config.json", "path to the configuration file")
+	flag.Parse()
+
+	// load the config from given path
+	conf := config.LoadConfig(*configPath)
+
+	// set tge no of aliens if provided on command line
 	conf.SetNoOfAliens(*numAliens)
 
 	// create the output file
@@ -36,15 +44,14 @@ func main() {
 	defer fileReader.Close()
 
 	// create the parser that would parse the map
-	par := parser.NewMap(conf.NoOfCities, conf.PossibleRelations)
+	prse := parser.NewMap(conf.NoOfCities, conf.PossibleRelations)
 
 	// create the simulator
 	sim := simulator.NewSimulation(
-		par,
+		prse,
 		fileReader,
 		conf.NoOfAliens,
-		fileWriter,
-		writer.NewState(fileReader, par),
+		writer.NewState(fileReader, prse, fileWriter),
 	)
 	// run the simulation
 	sim.Simulate()

@@ -16,13 +16,13 @@ func (s *Simulation) removeAlien(name int) {
 }
 
 func (s *Simulation) GetRandomCity() string {
-	if len(s.cities) == 0 {
+	if len(s.cityMap.GetAllNodes()) == 0 {
 		return ""
 	}
 	rand.Seed(time.Now().UnixNano())
-	nonce := rand.Intn(100) % len(s.cities)
+	nonce := rand.Intn(100) % len(s.cityMap.GetAllNodes())
 
-	return s.cities[nonce]
+	return s.cityMap.GetAllNodes()[nonce]
 }
 
 func (s *Simulation) GetRandomNextCity(currentCity string) string {

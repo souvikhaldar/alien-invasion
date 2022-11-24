@@ -18,7 +18,6 @@ type Alien struct {
 type Simulation struct {
 	cityMap     graph.Graph
 	aliveAliens []Alien
-	cities      []string
 	writer      writer.Writer
 }
 
@@ -37,7 +36,6 @@ func NewSimulation(
 		log.Fatal("Could not parse the map")
 	}
 
-	s.cities = p.GetCities()
 	s.aliveAliens = make([]Alien, noOfAliens)
 	for i := 0; i < noOfAliens; i++ {
 		s.aliveAliens[i].name = i

@@ -8,5 +8,4 @@ import (
 
 type Parser interface {
 	Parse(io.Reader) (graph.Graph, error)
-	GetCities() []string
 }

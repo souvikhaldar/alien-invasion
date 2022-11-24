@@ -1,5 +1,5 @@
 {
-  "input_file_path": "input_map2.txt",
+  "input_file_path": "testfiles/input_map2.txt",
   "no_of_aliens": 2,
   "no_of_cities": 100,
   "possible_relations": [
