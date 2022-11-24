@@ -15,7 +15,7 @@ func main() {
 	// the number of aliens to play in the simulation
 	numAliens := flag.Int("N", 0, "Number of aliens")
 	if numAliens == nil {
-		log.Panicln("Number of aliens not provided")
+		log.Println("Number of aliens not provided, using default..")
 	}
 
 	// path to the configuration file
@@ -26,7 +26,7 @@ func main() {
 	// load the config from given path
 	conf := config.LoadConfig(*configPath)
 
-	// set tge no of aliens if provided on command line
+	// set the no of aliens if provided on command line
 	conf.SetNoOfAliens(*numAliens)
 
 	// create the output file
@@ -51,8 +51,12 @@ func main() {
 		prse,
 		fileReader,
 		conf.NoOfAliens,
-		writer.NewState(fileReader, prse, fileWriter),
 	)
 	// run the simulation
 	sim.Simulate()
+	err = sim.SaveState(writer.NewState(fileReader, prse), fileWriter)
+	if err != nil {
+		log.Println("Error in saving simulated state: ", err)
+	}
+	return
 }

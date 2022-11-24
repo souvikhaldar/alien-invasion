@@ -1,0 +1,7 @@
+Pinson
+Clifton west=Amchitka
+Amchitka east=Clifton
+Anvik east=Martinsburg
+Martinsburg west=Anvik east=Hatch
+Hatch west=Martinsburg south=Jacobson
+Jacobson north=Hatch

@@ -16,22 +16,20 @@ type Alien struct {
 }
 
 type Simulation struct {
-	cityMap     graph.Graph
-	aliveAliens []Alien
-	writer      writer.Writer
+	cityMap        graph.Graph
+	aliveAliens    []Alien
+	killMsgPrinted map[string]struct{}
 }
 
 func NewSimulation(
 	p parser.Parser,
 	i io.Reader,
 	noOfAliens int,
-	wt writer.Writer,
-
 ) *Simulation {
 	s := new(Simulation)
-	s.writer = wt
 	var err error
 	s.cityMap, err = p.Parse(i)
+	s.killMsgPrinted = make(map[string]struct{})
 	if err != nil {
 		log.Fatal("Could not parse the map")
 	}
@@ -52,6 +50,7 @@ func (s *Simulation) moveOneStep() {
 }
 
 func (s *Simulation) kill() {
+	// check which aliens are going to fight with each other
 	collitionMap := make(map[string][]int)
 	for _, a := range s.aliveAliens {
 		_, ok := collitionMap[a.currentCity]
@@ -61,12 +60,18 @@ func (s *Simulation) kill() {
 			collitionMap[a.currentCity] = []int{a.name}
 		}
 	}
+
 	for city, aliens := range collitionMap {
 		if city == "" {
-			// The alien is trapped
 			continue
 		}
-		if len(aliens) > 1 {
+
+		if _, ok := s.killMsgPrinted[city]; len(aliens) > 1 && !ok {
+			// mark this city as printed
+			s.killMsgPrinted[city] = struct{}{}
+			// since more than 1 alien are present in one city
+			// hence there is going to be a fight and the aliens
+			// fighting will die along with the city
 			killmsg := fmt.Sprintf("%s has been destroyed by ", city)
 			for pos, a := range aliens {
 				if pos == len(aliens)-1 {
@@ -77,12 +82,12 @@ func (s *Simulation) kill() {
 				} else {
 					killmsg += fmt.Sprintf("alien %d, ", a)
 				}
+				// kill the alien
 				s.removeAlien(a)
 			}
 			log.Println(killmsg)
 			// Remove the city from the map
 			s.cityMap.DeleteNode(city)
-			// Remove the aliens
 		}
 	}
 }
@@ -95,12 +100,10 @@ func (s *Simulation) Simulate() {
 		// check if there is collition, kill the alien and destroy the map
 		s.kill()
 	}
-	// save the state of the map once the great wander is over
-	s.saveState()
 }
 
-func (s *Simulation) saveState() {
-	if err := s.writer.Write(); err != nil {
-		log.Fatal("Unable to save the state of map: ", err)
-	}
+// SaveState saves the final state of the map to the writer destination
+// save the state of the map once the great wander is over
+func (s *Simulation) SaveState(w writer.Writer, d io.Writer) error {
+	return w.Write(d)
 }

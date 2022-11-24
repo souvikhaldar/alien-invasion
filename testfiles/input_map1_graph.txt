@@ -1,0 +1,25 @@
+bee <--west--east-->bar
+		    ^
+		    |
+		    |
+		    north
+		    |
+		    |
+		    south
+		    |
+		    |
+		    v
+Baz <--west--east-->Foo
+		    ^
+		    |
+		    |
+		    north
+		    |
+		    |
+		    south
+		    |
+		    |
+		    v
+		    Qu-ux
+		   
+
