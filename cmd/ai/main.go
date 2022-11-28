@@ -58,8 +58,10 @@ func main() {
 	// run the simulation
 	g := RunSimulation(sim, prse, fileReader, fileWriter)
 
+	// create the writer
 	writer := writer.NewState(g, fileWriter)
 
+	// save the final state of our planet
 	err = SaveState(writer)
 	if err != nil {
 		log.Fatal(err)
