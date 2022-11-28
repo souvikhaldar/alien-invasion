@@ -5,29 +5,25 @@ import (
 	"io"
 	"log"
 
-	"github.com/souvikhaldar/alien-invasion/pkg/parser"
 	"github.com/souvikhaldar/go-ds/graph"
 )
 
 type State struct {
 	cityMap graph.Graph
+	writer  io.Writer
 }
 
 func NewState(
-	i io.Reader,
-	p parser.Parser,
+	c graph.Graph,
+	w io.Writer,
 ) *State {
-	c, err := p.Parse(i)
-	if err != nil {
-		log.Println("Unable to create the map: ", err)
-		return nil
-	}
 	return &State{
 		cityMap: c,
+		writer:  w,
 	}
 }
 
-func (s *State) Write(wt io.Writer) error {
+func (s *State) Write() error {
 	var buf bytes.Buffer
 	for _, c := range s.cityMap.GetAllNodes() {
 		buf.WriteString(c)
@@ -45,7 +41,7 @@ func (s *State) Write(wt io.Writer) error {
 			}
 			buf.WriteString(s.cityMap.GetRelationBetween(c, n) + "=" + n + " ")
 		}
-		if _, err := wt.Write(buf.Bytes()); err != nil {
+		if _, err := s.writer.Write(buf.Bytes()); err != nil {
 			log.Println("Unable to write: ", err)
 			return err
 

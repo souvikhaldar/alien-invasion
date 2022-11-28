@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"io"
 	"log"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/souvikhaldar/alien-invasion/pkg/simulator"
 	"github.com/souvikhaldar/alien-invasion/pkg/utils/config"
 	"github.com/souvikhaldar/alien-invasion/pkg/writer"
+	"github.com/souvikhaldar/go-ds/graph"
 )
 
 func main() {
@@ -52,11 +54,29 @@ func main() {
 		fileReader,
 		conf.NoOfAliens,
 	)
+
 	// run the simulation
-	sim.Simulate()
-	err = sim.SaveState(writer.NewState(fileReader, prse), fileWriter)
+	g := RunSimulation(sim, prse, fileReader, fileWriter)
+
+	writer := writer.NewState(g, fileWriter)
+
+	err = SaveState(writer)
 	if err != nil {
-		log.Println("Error in saving simulated state: ", err)
+		log.Fatal(err)
 	}
-	return
+}
+
+func RunSimulation(
+	sim simulator.Simulator,
+	prse parser.Parser,
+	fileReader io.Reader,
+	fileWriter io.Writer,
+) graph.Graph {
+	return sim.Simulate()
+}
+
+// SaveState saves the final state of the map to the writer destination
+// save the state of the map once the great wander is over
+func SaveState(w writer.Writer) error {
+	return w.Write()
 }

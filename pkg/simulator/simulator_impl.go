@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/souvikhaldar/alien-invasion/pkg/parser"
-	"github.com/souvikhaldar/alien-invasion/pkg/writer"
 	"github.com/souvikhaldar/go-ds/graph"
 )
 
@@ -92,7 +91,7 @@ func (s *Simulation) kill() {
 	}
 }
 
-func (s *Simulation) Simulate() {
+func (s *Simulation) Simulate() graph.Graph {
 	// let the aliens wander 10,000 times
 	for i := 0; i < 10000; i++ {
 		// move the aliens in any random direction one step
@@ -100,10 +99,5 @@ func (s *Simulation) Simulate() {
 		// check if there is collition, kill the alien and destroy the map
 		s.kill()
 	}
-}
-
-// SaveState saves the final state of the map to the writer destination
-// save the state of the map once the great wander is over
-func (s *Simulation) SaveState(w writer.Writer, d io.Writer) error {
-	return w.Write(d)
+	return s.cityMap
 }

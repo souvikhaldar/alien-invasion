@@ -1,14 +1,10 @@
 package simulator
 
-import (
-	"io"
-
-	"github.com/souvikhaldar/alien-invasion/pkg/writer"
-)
+import "github.com/souvikhaldar/go-ds/graph"
 
 type Simulator interface {
 	// Simulate simulates the invasion scenaio
-	Simulate()
-	// SaveState saves the final state to the destination provided
-	SaveState(writer.Writer, io.Writer) error
+	// and returns the final state of our planet
+	// once the simulation is over
+	Simulate() graph.Graph
 }

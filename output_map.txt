@@ -1,5 +1,0 @@
-Steprock south=Clifton
-Clifton north=Steprock
-Talihina
-Hardtner
-Anvik

@@ -1,4 +1,0 @@
-Clifton
-Pinson
-Anvik east=Martinsburg
-Martinsburg west=Anvik
