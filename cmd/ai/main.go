@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"io"
 	"log"
 	"os"
 
@@ -56,7 +55,7 @@ func main() {
 	)
 
 	// run the simulation
-	g := RunSimulation(sim, prse, fileReader, fileWriter)
+	g := RunSimulation(sim)
 
 	// create the writer
 	writer := writer.NewState(g, fileWriter)
@@ -70,9 +69,6 @@ func main() {
 
 func RunSimulation(
 	sim simulator.Simulator,
-	prse parser.Parser,
-	fileReader io.Reader,
-	fileWriter io.Writer,
 ) graph.Graph {
 	return sim.Simulate()
 }
